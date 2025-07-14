@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: photo-upload
+Transform:
+- AWS::Serverless-2016-10-31
+Resources:
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Fn::Sub: ${AWS::StackName}-uploads
+  GenerateUploadUrlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: generateUploadUrl.lambdaHandler
+      CodeUri: GenerateUploadUrlFunction
+      Runtime: nodejs22.x
+      Architectures:
+      - x86_64
+      Environment:
+        Variables:
+          BUCKET_NAME:
+            Ref: UploadBucket
+      Policies:
+      - S3CrudPolicy:
+          BucketName:
+            Ref: UploadBucket
+      Events:
+        UploadUrlApi:
+          Type: Api
+          Properties:
+            Path: /generate-upload-url
+            Method: POST
+    Metadata:
+      SamResourceId: GenerateUploadUrlFunction
+Outputs:
+  WebEndpoint:
+    Description: API Gateway endpoint URL for Prod stage
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/

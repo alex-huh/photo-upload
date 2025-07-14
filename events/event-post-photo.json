@@ -1,0 +1,4 @@
+{
+  "httpMethod": "POST",
+  "body": "{\"filename\": \"test.jpg\", \"contentType\": \"image/jpeg\"}"
+}
