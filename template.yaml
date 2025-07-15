@@ -27,7 +27,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: generateUploadUrl.lambdaHandler
-      CodeUri: src/
+      CodeUri: src/handlers/
       Runtime: nodejs22.x
       Architectures: [x86_64]
       Environment:
@@ -45,5 +45,5 @@ Resources:
 
 Outputs:
   WebEndpoint:
-    Description: "API Gateway endpoint URL for Prod stage"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Description: "API Gateway endpoint for generating S3 pre-signed upload URLs"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate-upload-url"

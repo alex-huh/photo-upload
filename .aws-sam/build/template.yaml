@@ -34,6 +34,6 @@ Resources:
       SamResourceId: GenerateUploadUrlFunction
 Outputs:
   WebEndpoint:
-    Description: API Gateway endpoint URL for Prod stage
+    Description: API Gateway endpoint for generating S3 pre-signed upload URLs
     Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate-upload-url
