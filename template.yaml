@@ -43,6 +43,26 @@ Resources:
             Path: /generate-upload-url
             Method: POST
 
+  ListPhotosFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: listPhotos.lambdaHandler
+      CodeUri: src/handlers/
+      Runtime: nodejs22.x
+      Architectures: [x86_64]
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref UploadBucket
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref UploadBucket
+      Events:
+        ListPhotosApi:
+          Type: Api
+          Properties:
+            Path: /list-images
+            Method: GET
+
 Outputs:
   WebEndpoint:
     Description: "API Gateway endpoint for generating S3 pre-signed upload URLs"
