@@ -6,13 +6,13 @@ const bucket = process.env.BUCKET_NAME;
 
 export async function lambdaHandler(event) {
   const headers = {
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": "http://localhost:5173",
     "Access-Control-Allow-Headers": "*",
-    "Access-Control-Allow-Methods": "OPTIONS,POST"
+    "Access-Control-Allow-Methods": "OPTIONS,POST,PUT"
   };
 
   if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "" };
+    return { statusCode: 200, headers, body: JSON.stringify({message: "CORS preflight success"}) };
   }
 
   try {

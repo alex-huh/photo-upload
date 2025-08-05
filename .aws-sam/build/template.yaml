@@ -3,15 +3,27 @@ Description: photo-upload
 Transform:
 - AWS::Serverless-2016-10-31
 Resources:
-  UploadBucket:
+  RecordPhotoBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName:
-        Fn::Sub: ${AWS::StackName}-uploads
+      BucketName: 54vv-record-photos
+      CorsConfiguration:
+        CorsRules:
+        - AllowedOrigins:
+          - http://localhost:5173
+          AllowedMethods:
+          - PUT
+          - GET
+          - HEAD
+          AllowedHeaders:
+          - '*'
+          ExposedHeaders:
+          - ETag
+          MaxAge: 3000
   GenerateUploadUrlFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: generateUploadUrl.lambdaHandler
+      Handler: generateUploadURL.lambdaHandler
       CodeUri: GenerateUploadUrlFunction
       Runtime: nodejs22.x
       Architectures:
@@ -19,17 +31,22 @@ Resources:
       Environment:
         Variables:
           BUCKET_NAME:
-            Ref: UploadBucket
+            Ref: RecordPhotoBucket
       Policies:
       - S3CrudPolicy:
           BucketName:
-            Ref: UploadBucket
+            Ref: RecordPhotoBucket
       Events:
         UploadUrlApi:
           Type: Api
           Properties:
             Path: /generate-upload-url
             Method: POST
+        UploadUrlOptions:
+          Type: Api
+          Properties:
+            Path: /generate-upload-url
+            Method: OPTIONS
     Metadata:
       SamResourceId: GenerateUploadUrlFunction
 Outputs:

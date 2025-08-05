@@ -18,30 +18,49 @@ Resources:
   # Each Lambda function is defined by properties:
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 
-  UploadBucket:
+  RecordPhotoBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "${AWS::StackName}-uploads"
+      BucketName: 54vv-record-photos
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins:
+              - http://localhost:5173
+            AllowedMethods:
+              - PUT
+              - GET
+              - HEAD
+            AllowedHeaders:
+              - "*"
+            ExposedHeaders:
+              - ETag
+            MaxAge: 3000
+
 
   GenerateUploadUrlFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: generateUploadUrl.lambdaHandler
+      Handler: generateUploadURL.lambdaHandler
       CodeUri: src/handlers/
       Runtime: nodejs22.x
       Architectures: [x86_64]
       Environment:
         Variables:
-          BUCKET_NAME: !Ref UploadBucket
+          BUCKET_NAME: !Ref RecordPhotoBucket
       Policies:
         - S3CrudPolicy:
-            BucketName: !Ref UploadBucket
+            BucketName: !Ref RecordPhotoBucket
       Events:
         UploadUrlApi:
           Type: Api
           Properties:
             Path: /generate-upload-url
             Method: POST
+        UploadUrlOptions:
+          Type: Api
+          Properties:
+            Path: /generate-upload-url
+            Method: OPTIONS
 
 Outputs:
   WebEndpoint:
