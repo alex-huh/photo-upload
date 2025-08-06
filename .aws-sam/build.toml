@@ -7,6 +7,6 @@ architecture = "x86_64"
 handler = "src/handlers/generateUploadUrl.lambdaHandler"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["GenerateUploadUrlFunction"]
+functions = ["GenerateUploadUrlFunction", "ListPhotosFunction"]
 
 [layer_build_definitions]
