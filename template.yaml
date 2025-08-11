@@ -71,10 +71,10 @@ Resources:
       Architectures: [x86_64]
       Environment:
         Variables:
-          BUCKET_NAME: !Ref UploadBucket
+          BUCKET_NAME: !Ref RecordPhotoBucket
       Policies:
         - S3ReadPolicy:
-            BucketName: !Ref UploadBucket
+            BucketName: !Ref RecordPhotoBucket
       Events:
         ListPhotosApi:
           Type: Api
