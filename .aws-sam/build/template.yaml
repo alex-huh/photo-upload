@@ -60,21 +60,34 @@ Resources:
       Environment:
         Variables:
           BUCKET_NAME:
-            Ref: UploadBucket
+            Ref: RecordPhotoBucket
       Policies:
       - S3ReadPolicy:
           BucketName:
-            Ref: UploadBucket
+            Ref: RecordPhotoBucket
       Events:
         ListPhotosApi:
           Type: Api
           Properties:
             Path: /list-images
             Method: GET
+          Cors:
+            AllowMethods: '''GET,OPTIONS'''
+            AllowHeaders: '''*'''
+            AllowOrigin: '''http://localhost:5173'''
+        ListPhotosOptions:
+          Type: Api
+          Properties:
+            Path: /list-images
+            Method: OPTIONS
     Metadata:
       SamResourceId: ListPhotosFunction
 Outputs:
-  WebEndpoint:
+  GenerateUploadUrlEndpoint:
     Description: API Gateway endpoint for generating S3 pre-signed upload URLs
     Value:
       Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate-upload-url
+  ListPhotosEndpoint:
+    Description: API Gateway endpoint for generating S3 pre-signed download URLs
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/list-images

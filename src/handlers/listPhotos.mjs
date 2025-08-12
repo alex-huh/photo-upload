@@ -1,11 +1,11 @@
-import {S3Client, ListObjectsV2Command} from '@aws-sdk/client-s3';
+import {S3Client, ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/client-s3';
 import {getSignedUrl} from '@aws-sdk/s3-request-presigner';
 
 const client = new S3Client({});
 const bucket = process.env.BUCKET_NAME;
 
 export async function lambdaHandler(event) {
-    const headers = {
+  const headers = {
     "Access-Control-Allow-Origin": "http://localhost:5173",
     "Access-Control-Allow-Headers": "*",
     "Access-Control-Allow-Methods": "GET,OPTIONS"
@@ -23,10 +23,10 @@ export async function lambdaHandler(event) {
       Prefix: prefix,
     });
 
-    const listed = await client.send(listCommand);
+    const response = await client.send(listCommand);
 
     const files = await Promise.all(
-      (listed.Contents || []).map(async (item) => {
+      (response.Contents || []).map(async (item) => {
         const url = await getSignedUrl(
           client,
           new GetObjectCommand({ Bucket: bucket, Key: item.Key }),
