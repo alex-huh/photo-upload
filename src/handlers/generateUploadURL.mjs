@@ -16,11 +16,12 @@ export async function lambdaHandler(event) {
   }
 
   try {
-    const { filename, contentType } = JSON.parse(event.body);
+    const { filename, contentType, folder} = JSON.parse(event.body);
+    const key = folder ? `${folder}/${filename}` : filename;
 
     const command = new PutObjectCommand({
       Bucket: bucket,
-      Key: filename,
+      Key: key,
       ContentType: contentType,
     });
 
